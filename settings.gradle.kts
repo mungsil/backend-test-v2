@@ -4,7 +4,7 @@ import java.nio.file.Files
 import java.nio.file.SimpleFileVisitor
 import kotlin.io.path.absolute
 
-rootProject.name = "backend-test-v1"
+rootProject.name = "backend-test-v2"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 dependencyResolutionManagement {
