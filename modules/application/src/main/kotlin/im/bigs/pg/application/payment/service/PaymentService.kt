@@ -39,11 +39,11 @@ class PaymentService(
 
         val approve = pgClient.approve(
             PgApproveRequest(
-                partnerId = partner.id,
                 amount = command.amount,
-                cardBin = command.cardBin,
-                cardLast4 = command.cardLast4,
-                productName = command.productName,
+                password = command.password,
+                cardNumber = command.cardNumber,
+                expiry = command.expiryDate,
+                birthDate = command.birthDate,
             ),
         )
         val hardcodedRate = java.math.BigDecimal("0.0300")
@@ -55,8 +55,8 @@ class PaymentService(
             appliedFeeRate = hardcodedRate,
             feeAmount = fee,
             netAmount = net,
-            cardBin = command.cardBin,
-            cardLast4 = command.cardLast4,
+            cardBin = null, // 임시
+            cardLast4 = null, // 임시
             approvalCode = approve.approvalCode,
             approvedAt = approve.approvedAt,
             status = PaymentStatus.APPROVED,
