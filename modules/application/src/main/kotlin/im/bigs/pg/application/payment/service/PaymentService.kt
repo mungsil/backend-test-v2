@@ -45,13 +45,15 @@ class PaymentService(
                 birthDate = command.birthDate,
             ),
         )
-        val hardcodedRate = java.math.BigDecimal("0.0300")
-        val hardcodedFixed = java.math.BigDecimal("100")
-        val (fee, net) = FeeCalculator.calculateFee(command.amount, hardcodedRate, hardcodedFixed)
+
+        val feePolicy = feePolicyRepository.findEffectivePolicy(partner.id)
+            ?: throw IllegalStateException("No effective fee policy found for partner ${partner.id}")
+
+        val (fee, net) = FeeCalculator.calculateFee(command.amount, feePolicy.percentage, feePolicy.fixedFee)
         val payment = Payment(
             partnerId = partner.id,
             amount = command.amount,
-            appliedFeeRate = hardcodedRate,
+            appliedFeeRate = feePolicy.percentage,
             feeAmount = fee,
             netAmount = net,
             cardBin = command.cardNumber.getBin(8),
