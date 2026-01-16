@@ -54,8 +54,8 @@ class PaymentService(
             appliedFeeRate = hardcodedRate,
             feeAmount = fee,
             netAmount = net,
-            cardBin = null, // 임시
-            cardLast4 = null, // 임시
+            cardBin = command.cardNumber.getBin(8),
+            cardLast4 = command.cardNumber.getLastN(4),
             approvalCode = approve.approvalCode,
             approvedAt = approve.approvedAt,
             status = PaymentStatus.APPROVED,
