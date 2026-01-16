@@ -33,7 +33,6 @@ class PaymentService(
         val partner = partnerRepository.findById(command.partnerId)
             ?: throw IllegalArgumentException("Partner not found: ${command.partnerId}")
         require(partner.active) { "Partner is inactive: ${partner.id}" }
-
         val pgClient = pgClients.firstOrNull { it.supports(partner.id) }
             ?: throw IllegalStateException("No PG client for partner ${partner.id}")
 

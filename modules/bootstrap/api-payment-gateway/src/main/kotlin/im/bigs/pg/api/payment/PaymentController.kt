@@ -7,6 +7,7 @@ import im.bigs.pg.api.payment.dto.CreatePaymentRequest
 import im.bigs.pg.api.payment.dto.PaymentResponse
 import im.bigs.pg.api.payment.dto.QueryResponse
 import im.bigs.pg.api.payment.dto.Summary
+import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -46,7 +47,7 @@ class PaymentController(
     @PostMapping
     fun create(@RequestBody req: CreatePaymentRequest): ResponseEntity<PaymentResponse> {
         val saved = paymentUseCase.pay(
-            PaymentCommand(
+            PaymentCommand.of(
                 partnerId = req.partnerId,
                 amount = req.amount,
                 password = req.password,

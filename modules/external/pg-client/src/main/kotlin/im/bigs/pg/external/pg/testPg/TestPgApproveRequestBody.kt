@@ -13,10 +13,6 @@ data class TestPgApproveRequestBody(
     companion object {
         fun from(request: PgApproveRequest): TestPgApproveRequestBody{
             with(request) {
-                require(cardNumber.replace("-", "").matches(Regex("""^\d{16}$"""))) {
-                    "카드번호는 숫자 16자리여야 합니다: $cardNumber"
-                }
-
                 require(birthDate.matches(Regex("""^\d{8}$"""))) {
                     "생년월일은 YYYYMMDD 형식이어야 합니다: $birthDate"
                 }
@@ -37,7 +33,7 @@ data class TestPgApproveRequestBody(
             return TestPgApproveRequestBody(
                 amount = request.amount,
                 password = request.password,
-                cardNumber = request.cardNumber,
+                cardNumber = request.cardNumber.value,
                 expiry = request.expiry,
                 birthDate = request.birthDate,
             )

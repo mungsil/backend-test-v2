@@ -1,5 +1,6 @@
 package im.bigs.pg.application.payment.port.`in`
 
+import im.bigs.pg.domain.payment.CardNumber
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -14,12 +15,35 @@ import java.time.LocalDate
  * @property birthDate 생년월일
  * @property productName 상품이름(없을 수 있음)
  */
-data class PaymentCommand(
+data class PaymentCommand private constructor(
     val partnerId: Long,
     val amount: BigDecimal,
     val password: String,
-    val cardNumber: String,
+    val cardNumber: CardNumber,
     val expiryDate: String,
     val birthDate: String,
     val productName: String? = null,
-)
+) {
+
+    companion object {
+        fun of(
+            partnerId: Long,
+            amount: BigDecimal,
+            password: String,
+            cardNumber: String,
+            expiryDate: String,
+            birthDate: String,
+            productName: String?
+        ): PaymentCommand {
+            return PaymentCommand(
+                partnerId = partnerId,
+                amount = amount,
+                password = password,
+                cardNumber = CardNumber.of(cardNumber),
+                expiryDate = expiryDate,
+                birthDate = birthDate,
+                productName = productName
+            )
+        }
+    }
+}

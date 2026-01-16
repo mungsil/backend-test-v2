@@ -2,11 +2,9 @@ package im.bigs.pg.external.pg.testPg
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import im.bigs.pg.application.pg.port.out.PgApproveRequest
-import im.bigs.pg.application.pg.port.out.PgApproveResult
+import im.bigs.pg.domain.payment.CardNumber
 import im.bigs.pg.domain.payment.PaymentStatus
-import im.bigs.pg.external.pg.AesGcmEncryptor
 import im.bigs.pg.external.pg.ExternalPgException
-import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.DisplayName
@@ -82,9 +80,6 @@ class TestPgClientTest(
         @JvmStatic
         fun invalidRequests(): Stream<Arguments> =
             Stream.of(
-                invalid("카드번호 형식 오류 (16자리 미만)") {
-                    copy(cardNumber = "1111-2222-3333")
-                },
                 invalid("생년월일 형식 오류 (8자리 아님)") {
                     copy(birthDate = "900101")
                 },
@@ -109,7 +104,7 @@ class TestPgClientTest(
             PgApproveRequest(
                 amount = BigDecimal("10000"),
                 password = "12",
-                cardNumber = "1111-2222-3333-4444",
+                cardNumber = CardNumber.of("1111-2222-3333-4444"),
                 expiry = "1227",
                 birthDate = "19900101"
             )

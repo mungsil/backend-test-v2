@@ -44,7 +44,15 @@ class 결제서비스Test {
         val savedSlot = slot<Payment>()
         every { paymentRepo.save(capture(savedSlot)) } answers { savedSlot.captured.copy(id = 99L) }
 
-        val cmd = PaymentCommand(partnerId = 1L, amount = BigDecimal("10000"), cardLast4 = "4242")
+        val cmd = PaymentCommand.of(
+            partnerId = 1L,
+            amount = BigDecimal(10000),
+            password = "12",
+            cardNumber = "1212-1212-1212-1212",
+            expiryDate = "1228",
+            birthDate = "19990112",
+            productName = "테스트"
+        )
         val res = service.pay(cmd)
 
         assertEquals(99L, res.id)
