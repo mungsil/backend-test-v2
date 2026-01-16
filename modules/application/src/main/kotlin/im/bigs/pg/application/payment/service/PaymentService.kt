@@ -33,30 +33,31 @@ class PaymentService(
         val partner = partnerRepository.findById(command.partnerId)
             ?: throw IllegalArgumentException("Partner not found: ${command.partnerId}")
         require(partner.active) { "Partner is inactive: ${partner.id}" }
-
         val pgClient = pgClients.firstOrNull { it.supports(partner.id) }
             ?: throw IllegalStateException("No PG client for partner ${partner.id}")
 
         val approve = pgClient.approve(
             PgApproveRequest(
-                partnerId = partner.id,
                 amount = command.amount,
-                cardBin = command.cardBin,
-                cardLast4 = command.cardLast4,
-                productName = command.productName,
+                password = command.password,
+                cardNumber = command.cardNumber,
+                expiry = command.expiryDate,
+                birthDate = command.birthDate,
             ),
         )
-        val hardcodedRate = java.math.BigDecimal("0.0300")
-        val hardcodedFixed = java.math.BigDecimal("100")
-        val (fee, net) = FeeCalculator.calculateFee(command.amount, hardcodedRate, hardcodedFixed)
+
+        val feePolicy = feePolicyRepository.findEffectivePolicy(partner.id)
+            ?: throw IllegalStateException("No effective fee policy found for partner ${partner.id}")
+
+        val (fee, net) = FeeCalculator.calculateFee(command.amount, feePolicy.percentage, feePolicy.fixedFee)
         val payment = Payment(
             partnerId = partner.id,
             amount = command.amount,
-            appliedFeeRate = hardcodedRate,
+            appliedFeeRate = feePolicy.percentage,
             feeAmount = fee,
             netAmount = net,
-            cardBin = command.cardBin,
-            cardLast4 = command.cardLast4,
+            cardBin = command.cardNumber.getBin(8),
+            cardLast4 = command.cardNumber.getLastN(4),
             approvalCode = approve.approvalCode,
             approvedAt = approve.approvedAt,
             status = PaymentStatus.APPROVED,

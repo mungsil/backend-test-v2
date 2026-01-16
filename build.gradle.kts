@@ -41,6 +41,7 @@ allprojects {
 
         // test
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testImplementation ("org.assertj:assertj-core:3.27.6")
         testImplementation("io.mockk:mockk:1.13.5")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
         testImplementation("com.appmattus.fixture:fixture:1.2.0")
@@ -91,6 +92,7 @@ project(":modules:infrastructure") {
         apply(plugin = "org.springframework.boot")
         apply(plugin = "io.spring.dependency-management")
         apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+        apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
     }
 }
 
