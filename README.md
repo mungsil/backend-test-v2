@@ -67,30 +67,31 @@
 기본 포트: 8080
 
 ## 6. API 사양(요약)
-1) 결제 생성
+1) 결제 생성 (스펙 수정)
 ```
 POST /api/v1/payments
 {
-  "partnerId": 1,
-  "amount": 10000,
-  "cardBin": "123456",
-  "cardLast4": "4242",
-  "productName": "샘플"
+"partnerId":"2",
+"amount":"990",
+  "password":"12",
+  "cardNumber":"1111-1111-1111-1111",
+  "expiryDate":"1227",
+  "birthDate":"20021026"
 }
 
 200 OK
 {
-  "id": 99,
-  "partnerId": 1,
-  "amount": 10000,
-  "appliedFeeRate": 0.0300,
-  "feeAmount": 400,
-  "netAmount": 9600,
-  "cardLast4": "4242",
-  "approvalCode": "...",
-  "approvedAt": "2025-01-01T00:00:00Z",
-  "status": "APPROVED",
-  "createdAt": "2025-01-01T00:00:00Z"
+"id": 1,
+"partnerId": 2,
+"amount": 990,
+"appliedFeeRate": 0.030000,
+"feeAmount": 130,
+"netAmount": 860,
+"cardLast4": "1111",
+"approvalCode": "01164848",
+"approvedAt": "2026-01-16 14:53:25",
+"status": "APPROVED",
+"createdAt": "2026-01-16 23:53:24"
 }
 ```
 
